@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -41,9 +43,22 @@ namespace RevertScreenResolution
 
         public ScreenSize GetMaximumSupportedScreenResolution()
         {
-            throw new NotImplementedException();
+            return GetSupportedScreenResolutions().OrderBy(ss => ss.Width * ss.Height).Last();
         }
 
+        public IEnumerable<ScreenSize> GetSupportedScreenResolutions()
+        {
+            var devmode = new Devmode();
+            devmode.dmDeviceName = new String(new char[32]);
+            devmode.dmSize = (short)Marshal.SizeOf(devmode);
+            devmode.dmDeviceName = Screen.PrimaryScreen.DeviceName;
+
+            while (EnumDisplaySettings(null, ENUM_CURRENT_SETTINGS, ref devmode) == 1)
+            {
+                yield return new ScreenSize { Width = (uint)devmode.dmPelsWidth, Height = (uint)devmode.dmPelsHeight };
+            }
+        }
+            
         [StructLayout(LayoutKind.Sequential)]
         public struct Devmode
         {
