@@ -10,6 +10,7 @@ namespace RevertScreenResolution
     {
         static void Main(string[] args)
         {
+
         }
     }
 }

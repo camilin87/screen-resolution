@@ -8,11 +8,9 @@ namespace RevertScreenResolution
     {
         internal static readonly Devmode InvalidDevmode = new Devmode { dmDeviceName = "INVALID" };
 
-        public bool SetResolution(uint width, uint height)
+        public bool SetResolution(ScreenSize screenSize)
         {
-            var resolutionChangeResult = false;
-            resolutionChangeResult = SetResolutionInternal(width, height);
-            return resolutionChangeResult;
+            return SetResolutionInternal(screenSize.Width, screenSize.Height);
         }
 
         private bool SetResolutionInternal(uint width, uint height)
@@ -39,6 +37,11 @@ namespace RevertScreenResolution
                 result = InvalidDevmode;
             }
             return result;
+        }
+
+        public ScreenSize GetMaximumSupportedScreenResolution()
+        {
+            throw new NotImplementedException();
         }
 
         [StructLayout(LayoutKind.Sequential)]
