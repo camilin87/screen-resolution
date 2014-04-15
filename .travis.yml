@@ -1,10 +1,9 @@
 language: c
 
 before_install:
-  - sudo apt-get update -qq > /dev/null
-  - sudo apt-get install -qq mono-devel mono-gmcs > /dev/null
-  - mozroots --import --sync
-
+   - sudo apt-get update -qq > /dev/null
+   - sudo apt-get install -qq mono-devel mono-gmcs gtk-sharp2
+ 
 script:
   - cd RevertScreenResolution/
-  - xbuild CI\ RevertScreenResolution.sln
+  - xbuild RevertScreenResolution.sln
