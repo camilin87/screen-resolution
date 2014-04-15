@@ -43,19 +43,26 @@ namespace RevertScreenResolution
 
         public ScreenSize GetMaximumSupportedScreenResolution()
         {
-            return GetSupportedScreenResolutions().OrderBy(ss => ss.Width * ss.Height).Last();
+            var maxSupportedResolution = (from ss in GetSupportedScreenResolutions()
+                                          group ss by ss.Area
+                                          into ssgroup
+                                          orderby ssgroup.Key descending
+                                          select ssgroup.First()).First();
+            return maxSupportedResolution;
         }
 
-        public IEnumerable<ScreenSize> GetSupportedScreenResolutions()
+        private IEnumerable<ScreenSize> GetSupportedScreenResolutions()
         {
             var devmode = new Devmode();
             devmode.dmDeviceName = new String(new char[32]);
             devmode.dmSize = (short)Marshal.SizeOf(devmode);
             devmode.dmDeviceName = Screen.PrimaryScreen.DeviceName;
 
-            while (EnumDisplaySettings(null, ENUM_CURRENT_SETTINGS, ref devmode) == 1)
+            int i = 0;
+            while (EnumDisplaySettings(null, i, ref devmode) == 1)
             {
                 yield return new ScreenSize { Width = (uint)devmode.dmPelsWidth, Height = (uint)devmode.dmPelsHeight };
+                i++;
             }
         }
             

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RevertScreenResolution
+﻿namespace RevertScreenResolution
 {
     class Program
     {
         static void Main(string[] args)
         {
-
+            var screenResolutionChanger = new ScreenResolutionChanger();
+            var maxScreenResolution = screenResolutionChanger.GetMaximumSupportedScreenResolution();
+            screenResolutionChanger.SetResolution(maxScreenResolution);
         }
     }
 }
